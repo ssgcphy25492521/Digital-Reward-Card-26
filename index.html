@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSGC 120th Anniversary Open Day Stamp Card</title>
+    <style>
+        :root {
+            --pale-blue: #e6f2ff;
+            --gold: #ffd700;
+            --dark-blue: #003366;
+        }
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--pale-blue);
+            color: var(--dark-blue);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            max-width: 600px;
+        }
+        .school-badge {
+            width: 90px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        h1 {
+            font-size: 20px;
+            margin: 5px 0;
+            line-height: 1.4;
+        }
+        sup {
+            font-size: 0.6em;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            width: 100%;
+            max-width: 650px;
+        }
+        @media(min-width: 500px) {
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        .zone-card {
+            background: var(--dark-blue);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #002244;
+        }
+        .zone-title {
+            font-size: 13px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 12px;
+            min-height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            line-height: 1.3;
+            width: 100%;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 8px;
+        }
+        .stamps-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+        .stamp {
+            width: 85px;
+            height: 85px;
+            border-radius: 12px;
+            border: 2px dashed #88aacc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+            position: relative;
+            background-color: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .stamp .stamp-emoji {
+            display: none;
+        }
+        .stamp.unlocked {
+            border-style: solid;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        .stamp.unlocked .stamp-emoji {
+            display: block;
+        }
+        .stamp.unlocked {
+            background: linear-gradient(135deg, #ffe875, var(--gold));
+            border-color: #d4af37;
+            color: #5c4308;
+        }
+        .congratulations {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+            max-width: 650px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #c3e6cb;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        .action-btn {
+            margin-top: 25px;
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            font-size: 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .action-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .action-btn:not(:disabled) {
+            background-color: #28a745;
+        }
+        .action-btn:not(:disabled):hover {
+            background-color: #218838;
+        }
+
+        /* Custom Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-box {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 300px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .modal-text {
+            margin-bottom: 20px;
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--dark-blue);
+        }
+        .modal-buttons {
+            display: flex;
+            justify-content: space-around;
+            gap: 10px;
+        }
+        .btn-cancel {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .btn-confirm {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img class="school-badge" src="badge.png" alt="St. Stephen's Girls' College Badge" onerror="this.style.display='none'">
+        <h1>St. Stephen’s Girls’ College</h1>
+        <h1>120<sup>th</sup> Anniversary Open Day</h1>
+        <h1>聖士提反女子中學</h1>
+        <h1>一百二十周年校慶開放日</h1>
+        <p style="font-size: 16px; margin: 15px 0 5px 0; font-weight: bold; color: #003366;">Digital Reward Card</p>
+        <p style="font-size: 16px; margin: 5px 0 0 0; font-weight: bold; color: #003366;">電子印花收集卡</p>
+    </div>
+
+    <div id="congrats-banner" class="congratulations">
+        🎉 🎉 Congratulations! You have collected all 26 stamps! Please proceed to Rooms M009 / M010 in the June Li Building to redeem your souvenirs.<br><br>
+        恭喜您！您已集齊26個印花！請前往李余愛喜大樓 M009/M010 室領取紀念品。🎉 🎉
+    </div>
+
+    <div class="grid-container">
+        <!-- 1 -->
+        <div class="zone-card">
+            <div class="zone-title">1. Archives Team</div>
+            <div class="stamps-container">
+                <div class="stamp" id="STAMP_01"><span class="stamp-emoji">📜</span></div>
+            </div>
+        </div>
+        <!-- 2 -->
+        <div class="zone-card">
+            <div class="zone-title">2. Chinese Dept / Activity Team / Drama</div>
+            <div class="stamps-container">
+                <div class="stamp" id="STAMP_02"><span class="stamp-emoji">🎭</span></div>
+            </div>
+        </div>
+        <!-- 3 -->
+        <div class="zone-card">
+            <div class="zone-title">3. History / Civics / National Education</div>
+            <div class="stamps-container">
+                <div class="stamp" id="STAMP_03"><span class="stamp-emoji">🏛️</span></div>
+            </div>
+        </div>
+        <!-- 4 -->
+        <div class="zone-card">
+            <div class="zone-title">4. Geography Department</div>
+            <div class="stamps-container">
+                <div class="stamp" id="STAMP_04"><span class="stamp-emoji">🌍</span></div>
+            </div>
+        </div>
+        <!-- 5 -->
+        <div class="zone-card">
+            <div class="zone-title">5. English Department</div>
+            <div class="stamps-container">
+                <div class="stamp" id="STAMP_05"><span class="stamp-emoji">🔤</span></div>
+            </div>
+        </div>
+        <!-- 6 -->
+        <div class="zone-card">
+            <div class="zone-title">6. Music Department</div>
+            <div class="stamps-container">
+                <div class="stamp" id="STAMP_06"><span class="stamp-emoji">🎵</span></div>
+            </div>
+        </div>
+        <!-- 7 -->
+        <div class="zone-card">
+            <div class="zone-title">7. Student Achievements & Leadership</div>
+            <div class="stamps-container">
+                <div class="stamp" id="STAMP_07"><span class="stamp-emoji">🌟</span></div>
+            </div>
+        </div>
+        <!-- 8 -->
+        <div class="zone-card">
+            <div class="zone-title">8. Library</div>
+            <div class="stamps-container">
+                <div class="stamp" id="STAMP_08"><span class="stamp-emoji">📚</span></div>
+            </div>
+        </div>
+        <!-- 9 -->
+        <div class="zone-card">
+            <div class="zone-title">9. Religious Education Dept</div>
+            <div class="stamps-container">
+                <div class="stamp" id="STAMP_09"><span class="stamp-emoji">⛪</span></div>
+            </div>
+        </div>
+        <!-- 10 -->
+        <div class="zone-card">
+            <div class="zone-title">10. BAFS / Econ / Tech & Living</div>
+            <div class="stamps-container">
+                <div class="stamp" id="STAMP_10"><span class="stamp-emoji">📊</span></div>
+            </div>
+        </div>
+        <!-- 11 -->
+        <div class="zone-card">
+            <div class="zone-title">11. Biology Department</div>
+            <div class="stamps-container">
+                <div class="stamp" id="STAMP_11"><span class="stamp-emoji">🌿</span></div>
+            </div>
+        </div>
+        <!-- 12 -->
+        <div class="zone-card">
+            <div class="zone-title">12. Chemistry Department</div>
+            <div class="stamps-container">
+                <div class="stamp" id="STAMP_12"><span class="stamp-emoji">🧪</span></div>
+            </div>
+        </div>
+        <!-- 13 -->
+        <div class="zone-card">
+            <div class="zone-title">13. ICT Department</div>
+            <div class="stamps-container">
+                <div class="stamp" id="STAMP_13"><span class="stamp-emoji">💻</span></div>
+            </div>
+        </div>
+        <div class="zone-card">
+            <div class="zone-title">14. Mathematics Department</div>
+            <div class="stamps-container">
+                <div class="stamp" id="STAMP_14"><span class="stamp-emoji">📐</span></div>
+            </div>
+        </div>
+        <div class="zone-card">
+            <div class="zone-title">15. Physics Department</div>
+            <div class="stamps-container">
+                <div class="stamp" id="STAMP_15"><span class="stamp-emoji">⚛️</span></div>
+            </div>
+        </div>
+        <div class="zone-card">
+            <div class="zone-title">16. STEAM Innovation Showcase</div>
+            <div class="stamps-container">
+                <div class="stamp" id="STAMP_16"><span class="stamp-emoji">🚀</span></div>
+            </div>
+        </div>
+        <div class="zone-card">
+            <div class="zone-title">17. Students' Assoc. Merchandise</div>
+            <div class="stamps-container">
+                <div class="stamp" id="STAMP_17"><span class="stamp-emoji">🛍️</span></div>
+            </div>
+        </div>
+        <div class="zone-card">
+            <div class="zone-title">18. Share Your Story</div>
+            <div class="stamps-container">
+                <div class="stamp" id="STAMP_18"><span class="stamp-emoji">💬</span></div>
+            </div>
+        </div>
+        <div class="zone-card">
+            <div class="zone-title">19. Student Support & PRIMES</div>
+            <div class="stamps-container">
+                <div class="stamp" id="STAMP_19"><span class="stamp-emoji">🤝</span></div>
+            </div>
+        </div>
+        <div class="zone-card">
+            <div class="zone-title">20. Healthy Lifestyle & PE</div>
+            <div class="stamps-container">
+                <div class="stamp" id="STAMP_20"><span class="stamp-emoji">跑</span></div>
+            </div>
+        </div>
+        <div class="zone-card">
+            <div class="zone-title">21. Alumni / PTA / Publications</div>
+            <div class="stamps-container">
+                <div class="stamp" id="STAMP_21"><span class="stamp-emoji">✉️</span></div>
+            </div>
+        </div>
+        <div class="zone-card">
+            <div class="zone-title">22. Community Service Group</div>
+            <div class="stamps-container">
+                <div class="stamp" id="STAMP_22"><span class="stamp-emoji">❤️</span></div>
+            </div>
+        </div>
+        <div class="zone-card">
+            <div class="zone-title">23. Cultural & Visual Arts</div>
+            <div class="stamps-container">
+                <div class="stamp" id="STAMP_23"><span class="stamp-emoji">🎨</span></div>
+            </div>
+        </div>
+        <div class="zone-card">
+            <div class="zone-title">24. Global Experience Team</div>
+            <div class="stamps-container">
+                <div class="stamp" id="STAMP_24"><span class="stamp-emoji">✈️</span></div>
+            </div>
+        </div>
+        <div class="zone-card">
+            <div class="zone-title">25. Other Learning Experiences</div>
+            <div class="stamps-container">
+                <div class="stamp" id="STAMP_25"><span class="stamp-emoji">🧗‍♀️</span></div>
+            </div>
+        </div>
+        <div class="zone-card">
+            <div class="zone-title">26. Sustainable Dev Goals Team</div>
+            <div class="stamps-container">
+                <div class="stamp" id="STAMP_26"><span class="stamp-emoji">🌱</span></div>
+            </div>
+        </div>
+    </div>
+
+    <button id="reset-btn" class="action-btn" disabled>Reset Card / 重設圖章</button>
+
+    <div id="confirm-modal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-text">Are you sure you want to reset all collected stamps?<br><br>您確定要重設所有已收集的印花嗎？</div>
+            <div class="modal-buttons">
+                <button id="modal-cancel" class="btn-cancel">Cancel / 取消</button>
+                <button id="modal-confirm" class="btn-confirm">Reset / 重設</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const stamps = document.querySelectorAll('.stamp');
+        const congratsBanner = document.getElementById('congrats-banner');
+        const resetBtn = document.getElementById('reset-btn');
+        const modal = document.getElementById('confirm-modal');
+        const modalCancel = document.getElementById('modal-cancel');
+        const modalConfirm = document.getElementById('modal-confirm');
+
+        // Function to check if all 26 stamps are collected
+        function checkCompletion() {
+            const unlockedStamps = document.querySelectorAll('.stamp.unlocked');
+            if (unlockedStamps.length === 26) {
+                congratsBanner.style.display = 'block';
+                congratsBanner.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                congratsBanner.style.display = 'none';
+            }
+            
+            // Enable reset button if at least one stamp is unlocked
+            resetBtn.disabled = unlockedStamps.length === 0;
+        }
+
+        // Load saved stamps from local storage on launch
+        stamps.forEach(stamp => {
+            const stampId = stamp.id;
+            if (localStorage.getItem(stampId) === 'unlocked') {
+                stamp.classList.add('unlocked');
+            }
+
+            // Click to toggle stamp
+            stamp.addEventListener('click', () => {
+                stamp.classList.toggle('unlocked');
+                if (stamp.classList.contains('unlocked')) {
+                    localStorage.setItem(stampId, 'unlocked');
+                } else {
+                    localStorage.removeItem(stampId);
+                }
+                checkCompletion();
+            });
+        });
+
+        // Initialize display state
+        checkCompletion();
+
+        // Modal triggers
+        resetBtn.addEventListener('click', () => modal.style.display = 'flex');
+        modalCancel.addEventListener('click', () => modal.style.display = 'none');
+        
+        modalConfirm.addEventListener('click', () => {
+            stamps.forEach(stamp => {
+                stamp.classList.remove('unlocked');
+                localStorage.removeItem(stamp.id);
+            });
+            modal.style.display = 'none';
+            checkCompletion();
+        });
+    </script>
+</body>
+</html>
