@@ -418,7 +418,7 @@
             }
             
             // Enable reset button if at least one stamp is unlocked
-            resetBtn.disabled = unlockedStamps.length === 26;
+            resetBtn.disabled = unlockedStamps.length !== 26;
         }
 
         // Load saved stamps from local storage on launch
