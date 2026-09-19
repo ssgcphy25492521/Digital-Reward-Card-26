@@ -387,14 +387,14 @@
         </div>
     </div>
 
-    <button id="reset-btn" class="action-btn" disabled>Reset Card / 重設圖章</button>
+    <button id="reset-btn" class="action-btn" disabled>Redeem 兌換</button>
 
     <div id="confirm-modal" class="modal-overlay">
         <div class="modal-box">
-            <div class="modal-text">Are you sure you want to reset all collected stamps?<br><br>您確定要重設所有已收集的印花嗎？</div>
+            <div class="modal-text">I confirm that I have redeemed the souvenir and agree to reset the reward card.<br><br>我確認我已兌換紀念品並同意重設印花收集卡。</</div>
             <div class="modal-buttons">
                 <button id="modal-cancel" class="btn-cancel">Cancel / 取消</button>
-                <button id="modal-confirm" class="btn-confirm">Reset / 重設</button>
+                <button id="modal-confirm" class="btn-confirm">Confirm / 確認</</button>
             </div>
         </div>
     </div>
@@ -418,7 +418,7 @@
             }
             
             // Enable reset button if at least one stamp is unlocked
-            resetBtn.disabled = unlockedStamps.length === 0;
+            resetBtn.disabled = unlockedStamps.length === 26;
         }
 
         // Load saved stamps from local storage on launch
