@@ -439,7 +439,22 @@
                 checkCompletion();
             });
         });
+// --- ADD THIS NEW BLOCK ---
+        // Check URL for scanned stamp parameter (e.g., ?stamp=STAMP_01)
+        const urlParams = new URLSearchParams(window.location.search);
+        const scannedStamp = urlParams.get('stamp');
 
+        if (scannedStamp) {
+            const targetStamp = document.getElementById(scannedStamp);
+            if (targetStamp) {
+                targetStamp.classList.add('unlocked');
+                localStorage.setItem(scannedStamp, 'unlocked');
+                
+                // Clean the URL so refreshing doesn't keep the parameter
+                window.history.replaceState(null, '', window.location.pathname);
+            }
+        }
+        // --- END OF NEW BLOCK ---
         // Initialize display state
         checkCompletion();
 
