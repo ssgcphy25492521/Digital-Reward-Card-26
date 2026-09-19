@@ -427,17 +427,6 @@
             if (localStorage.getItem(stampId) === 'unlocked') {
                 stamp.classList.add('unlocked');
             }
-
-            // Click to toggle stamp
-            stamp.addEventListener('click', () => {
-                stamp.classList.toggle('unlocked');
-                if (stamp.classList.contains('unlocked')) {
-                    localStorage.setItem(stampId, 'unlocked');
-                } else {
-                    localStorage.removeItem(stampId);
-                }
-                checkCompletion();
-            });
         });
 // --- ADD THIS NEW BLOCK ---
         // Check URL for scanned stamp parameter (e.g., ?stamp=STAMP_01)
